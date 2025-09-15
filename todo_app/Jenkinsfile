@@ -8,12 +8,7 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/nabeel329/Todo_APP_updated.git'
-            }
-        }
-
+        
         stage('Build Docker Image') {
             steps {
                 script {
