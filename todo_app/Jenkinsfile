@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = 'dockerhub-creds'  // Jenkins ID for DockerHub login
+        IMAGE_NAME = 'nabeel1279/react-app'        // Your DockerHub repo
+        TAG = 'latest'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/nabeel329/Todo_APP_updated.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t $IMAGE_NAME:$TAG .'
+                }
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+                        sh 'docker push $IMAGE_NAME:$TAG'
+                    }
+                }
+            }
+        }
+    }
+}
